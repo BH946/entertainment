@@ -4,6 +4,7 @@ package com.cafe24.entertainment.Controller;
 import com.cafe24.entertainment.Entity.CardReading;
 import com.cafe24.entertainment.Entity.TarotCard;
 import com.cafe24.entertainment.Entity.dto.CardReadingRequestDto;
+import com.cafe24.entertainment.Entity.dto.CardReadingResponseDto;
 import com.cafe24.entertainment.Service.CardReadingService;
 import com.cafe24.entertainment.Service.TarotCardService;
 import jakarta.validation.Valid;
@@ -37,9 +38,11 @@ public class CardReadingController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CardReading> findById(@PathVariable("id") Long id) {
-    return ResponseEntity.status(HttpStatus.OK).body(cardReadingService.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("리딩을 찾을 수 없습니다.")));
+  public ResponseEntity<CardReadingResponseDto> findById(@PathVariable("id") Long id) {
+    CardReading cardReading = cardReadingService.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("리딩을 찾을 수 없습니다."));
+    CardReadingResponseDto res = new CardReadingResponseDto(cardReading);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 
 }

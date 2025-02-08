@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/entertainment/tarot
+    username: sa
+    password:
+      driver-class-name: org.h2.Driver
+  #    url: jdbc:oracle:thin:@localhost:1521:STR
+  #    username: testUser
+  #    password: 1234
+  #    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+#      ddl-auto: create # table 자동 생성
+      ddl-auto: none # db 초기화 없앰
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+
+server:
+  servlet:
+    session:
+      timeout: 30m # session timeout 30min
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
+logging:
+  level:
+    com.cafe24: debug

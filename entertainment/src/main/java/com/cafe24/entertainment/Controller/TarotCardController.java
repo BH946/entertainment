@@ -2,6 +2,7 @@ package com.cafe24.entertainment.Controller;
 
 import com.cafe24.entertainment.Entity.TarotCard;
 import com.cafe24.entertainment.Entity.dto.TarotCardRequestDto;
+import com.cafe24.entertainment.Entity.dto.TarotCardResponseDto;
 import com.cafe24.entertainment.Service.TarotCardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,23 +32,31 @@ public class TarotCardController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<TarotCard> findById(@PathVariable("id") Long id) {
-    return ResponseEntity.status(HttpStatus.OK).body(tarotCardService.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("카드를 찾을 수 없습니다.")));
+  public ResponseEntity<TarotCardResponseDto> findById(@PathVariable("id") Long id) {
+    TarotCard tarotCard = tarotCardService.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("카드를 찾을 수 없습니다."));
+    TarotCardResponseDto res = new TarotCardResponseDto(tarotCard);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 
   @GetMapping("/number/{cardNumber}")
-  public ResponseEntity<TarotCard> findByCardNumber(@PathVariable("cardNumber") Long cardNumber) {
-    return ResponseEntity.ok(tarotCardService.findByCardNumber(cardNumber));
+  public ResponseEntity<TarotCardResponseDto> findByCardNumber(@PathVariable("cardNumber") Long cardNumber) {
+    TarotCard tarotCard = tarotCardService.findByCardNumber(cardNumber);
+    TarotCardResponseDto res = new TarotCardResponseDto(tarotCard);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 
   @GetMapping("/nameEn/{name}")
-  public ResponseEntity<TarotCard> findByNameEn(@PathVariable("name") String name) {
-    return ResponseEntity.ok(tarotCardService.findByNameEn(name));
+  public ResponseEntity<TarotCardResponseDto> findByNameEn(@PathVariable("name") String name) {
+    TarotCard tarotCard = tarotCardService.findByNameEn(name);
+    TarotCardResponseDto res = new TarotCardResponseDto(tarotCard);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 
   @GetMapping("/nameKr/{name}")
-  public ResponseEntity<TarotCard> findByNameKr(@PathVariable("name") String name) {
-    return ResponseEntity.ok(tarotCardService.findByNameKr(name));
+  public ResponseEntity<TarotCardResponseDto> findByNameKr(@PathVariable("name") String name) {
+    TarotCard tarotCard = tarotCardService.findByNameKr(name);
+    TarotCardResponseDto res = new TarotCardResponseDto(tarotCard);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
   }
 }
