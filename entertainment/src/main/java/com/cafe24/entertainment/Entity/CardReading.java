@@ -34,25 +34,21 @@ public class CardReading {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "tarot_card_id") //FK
   private TarotCard tarotCard;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "reading_category_id") //FK
+  @Enumerated(EnumType.STRING)
   private ReadingCategory readingCategory;
   @Enumerated(EnumType.STRING)
   private ReadingType readingType;
 
   //연관관계 편의 메서드
-  public void setTarotCar(TarotCard tarotCard) {
+  public void setTarotCard(TarotCard tarotCard) {
     this.tarotCard = tarotCard;
-  }
-
-  public void setReadingCategory(ReadingCategory readingCategory) {
-    this.readingCategory = readingCategory;
   }
 
   //생성 편의 메서드
   public static CardReading createCardReading(CardReadingRequestDto dto) {
     CardReading cardReading = new CardReading();
     cardReading.description = dto.getDescription();
+    cardReading.readingCategory = dto.getReadingCategory();
     cardReading.readingType = dto.getReadingType();
     cardReading.createdAt = LocalDateTime.now();
     cardReading.updatedAt = LocalDateTime.now();

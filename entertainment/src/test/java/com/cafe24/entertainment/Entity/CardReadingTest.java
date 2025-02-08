@@ -12,7 +12,7 @@ class CardReadingTest {
   @Test
   void 생성_편의_메서드() {
     // given
-    CardReadingRequestDto dto = new CardReadingRequestDto("test", ReadingType.UPRIGHT);
+    CardReadingRequestDto dto = new CardReadingRequestDto(0L, "test", ReadingCategory.LOVE, ReadingType.UPRIGHT);
 
     // when
     CardReading cardReading = CardReading.createCardReading(dto);
@@ -20,6 +20,7 @@ class CardReadingTest {
     // then
     Assertions.assertInstanceOf(CardReading.class, cardReading);
     Assertions.assertEquals("test", cardReading.getDescription());
+    Assertions.assertEquals(ReadingCategory.LOVE, cardReading.getReadingCategory());
     Assertions.assertEquals(ReadingType.UPRIGHT, cardReading.getReadingType());
     Assertions.assertNotNull(cardReading.getCreatedAt());
     Assertions.assertNotNull(cardReading.getUpdatedAt());
@@ -29,17 +30,14 @@ class CardReadingTest {
   public void 연관관계_편의_메서드() throws Exception {
     // given
     CardReading cardReading = CardReading.createCardReading(
-        new CardReadingRequestDto("test2", ReadingType.REVERSED));
+        new CardReadingRequestDto(0L, "test2", ReadingCategory.LOVE, ReadingType.REVERSED));
     TarotCard tarotCard = TarotCard.createTarotCard(
         new TarotCardRequestDto("abc", "에이비씨", 0L, null, "사랑,운면,장난"));
-    ReadingCategory readingCategory = ReadingCategory.createReadingCategory("health");
 
     // when
-    cardReading.setReadingCategory(readingCategory);
     cardReading.setTarotCard(tarotCard);
 
     // then
     Assertions.assertEquals(tarotCard, cardReading.getTarotCard());
-    Assertions.assertEquals(readingCategory, cardReading.getReadingCategory());
   }
 }
