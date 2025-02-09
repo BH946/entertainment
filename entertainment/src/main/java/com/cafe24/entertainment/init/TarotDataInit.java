@@ -25,13 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
  * */
 
 @Slf4j
-@Component //빈 등록
+//@Component //빈 등록
 @RequiredArgsConstructor //생성자 주입
 public class TarotDataInit {
   private final InitService initService;
 
   // 해당 클래스 인스턴스 생성(construct)된 후 자동 실행
-  @PostConstruct
+//  @PostConstruct
   public void init() {
     initService.initTarot();
   }
