@@ -25,13 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
  * */
 
 @Slf4j
-//@Component //빈 등록
+@Component //빈 등록
 @RequiredArgsConstructor //생성자 주입
 public class TarotDataInit {
   private final InitService initService;
 
   // 해당 클래스 인스턴스 생성(construct)된 후 자동 실행
-//  @PostConstruct
+  @PostConstruct
   public void init() {
     initService.initTarot();
   }
@@ -143,7 +143,7 @@ public class TarotDataInit {
           for (JsonNode card : YesNoCards) {
             //upright (yes)
             CardReadingRequestDto dtoG = new CardReadingRequestDto(
-                card.get("number").asLong(), card.get("upright").get("general").asText(), ReadingCategory.GENERAL, ReadingType.UPRIGHT
+                card.get("number").asLong(), card.get("upright").get("yesno").asText(), ReadingCategory.YESNO, ReadingType.UPRIGHT
             );
             TarotCard tarotCard = tarotCardRepository.findByCardNumber(dtoG.getCardNumber());
             CardReading cardReadingG = CardReading.createCardReading(dtoG);
@@ -151,7 +151,7 @@ public class TarotDataInit {
             cardReadingRepository.save(cardReadingG);
             //reversed (no)
             dtoG = new CardReadingRequestDto(
-                card.get("number").asLong(), card.get("reversed").get("general").asText(), ReadingCategory.GENERAL, ReadingType.REVERSED
+                card.get("number").asLong(), card.get("reversed").get("yesno").asText(), ReadingCategory.YESNO, ReadingType.REVERSED
             );
             tarotCard = tarotCardRepository.findByCardNumber(dtoG.getCardNumber());
             cardReadingG = CardReading.createCardReading(dtoG);

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,8 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @WebMvcTest(controllers = CardReadingController.class)
@@ -104,5 +107,57 @@ class CardReadingControllerTest {
     verify(cardReadingService).save(any());
     verify(cardReadingService).findById(any());
     verify(tarotCardService).findByCardNumber(number);
+  }
+
+  @Test
+  public void 오늘의타로() throws Exception {
+    // given
+    TarotCard tarotCard = TarotCard.createTarotCard(new TarotCardRequestDto(nameEn, nameKr, number, imageUrl, keyword));
+    CardReading cardReading = CardReading.createCardReading(new CardReadingRequestDto(
+        number, description, ReadingCategory.GENERAL, ReadingType.UPRIGHT
+    ));
+    cardReading.setTarotCard(tarotCard);
+
+    // when
+    when(tarotCardService.findByCardNumber(0L)).thenReturn(tarotCard);
+    when(cardReadingService.getRandomReading(tarotCard)).thenReturn(cardReading);
+    mockMvc.perform(
+            get("/api/v1/cardReading/today/" + 0L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+        )
+        .andExpect(status().isOk())
+        .andDo(print());
+
+    // then
+    verify(tarotCardService).findByCardNumber(any());
+    verify(cardReadingService).getRandomReading(any());
+  }
+
+  @Test
+  public void 카테고리별타로() throws Exception {
+    // given
+    TarotCard tarotCard = TarotCard.createTarotCard(new TarotCardRequestDto(nameEn, nameKr, number, imageUrl, keyword));
+    CardReading cardReading = CardReading.createCardReading(new CardReadingRequestDto(
+        number, description, ReadingCategory.GENERAL, ReadingType.UPRIGHT
+    ));
+    cardReading.setTarotCard(tarotCard);
+
+    // when
+    when(tarotCardService.findByCardNumber(0L)).thenReturn(tarotCard);
+    when(cardReadingService.getRandomReadingByCategory(tarotCard, "general")).thenReturn(cardReading);
+    mockMvc.perform(
+            get("/api/v1/cardReading/category/" + 0L + "/general")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+        )
+        .andExpect(status().isOk())
+        .andDo(print());
+
+    // then
+    verify(tarotCardService).findByCardNumber(any());
+    verify(cardReadingService).getRandomReadingByCategory(any(), any());
   }
 }

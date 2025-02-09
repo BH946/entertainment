@@ -21,7 +21,8 @@ public class CardReadingResponseDto {
   private ReadingType readingType;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  private TarotCard tarotCard; //딱히 사용안할 것 같아서 일부러 Lazy강제 초기화 안했음.
+  private TarotCard tarotCard; //딱히 사용안할 것 같아서 일부러 Lazy강제 초기화 안했음. (컨트롤러 inner class 에선 함! 필요할 때 쓰는거지)
+  //애초에 ResponseDto 는 거의 컨트롤러에서만 본다 생각.
 
   public CardReadingResponseDto(CardReading cardReading) {
     this.description = cardReading.getDescription();

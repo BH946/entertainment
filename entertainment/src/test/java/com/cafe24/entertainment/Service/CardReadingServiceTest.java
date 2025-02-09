@@ -9,9 +9,11 @@ import com.cafe24.entertainment.Entity.TarotCard;
 import com.cafe24.entertainment.Entity.dto.CardReadingRequestDto;
 import com.cafe24.entertainment.Entity.dto.TarotCardRequestDto;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -80,4 +82,87 @@ class CardReadingServiceTest {
     log.info("description: {}", readings.get(0).getDescription());
   }
 
+  @Test
+  @Order(4)
+  public void 오늘의타로() throws Exception {
+    // given
+    TarotCard tarotCard = tarotCardService.findByCardNumber(20L);
+    CardReading findCardReading = null;
+
+    // when
+    for (int i = 0; i < 10; i++) {
+      findCardReading = cardReadingService.getRandomReading(tarotCard);
+      log.info("오늘의타로 추출: {}", findCardReading.getDescription());
+    }
+
+    // then
+    Assertions.assertInstanceOf(CardReading.class, findCardReading);
+  }
+
+  @Test
+  @Order(5)
+  public void 카테고리별타로() throws Exception {
+    // given
+    TarotCard tarotCard = tarotCardService.findByCardNumber(20L);
+    CardReading findCardReading = null;
+
+    // when
+    for (int i = 0; i < 10; i++) {
+      findCardReading = cardReadingService.getRandomReadingByCategory(tarotCard, "love");
+      log.info("카테고리별타로 추출: {}", findCardReading.getDescription());
+      findCardReading = cardReadingService.getRandomReadingByCategory(tarotCard, "yesno");
+      log.info("카테고리별타로 추출: {}", findCardReading.getDescription());
+    }
+
+    // then
+    Assertions.assertInstanceOf(CardReading.class, findCardReading);
+  }
+
+
+  //데이터 삽입용
+  @Test
+  @Order(3)
+  @Transactional //동일한 범위의 영속성 컨텍스트 사용
+  @Rollback(value = false)
+  public void init() {
+    // 타로 카드 생성
+    TarotCard card = TarotCard.createTarotCard(new TarotCardRequestDto(
+        "The Fool", "바보", 20L, null, "시작, 모험"
+    ));
+    tarotCardService.save(card);
+
+    // 카드 리딩 데이터 생성
+    createReading(card, 20L, "일반 관련 조언입니다.UP", ReadingCategory.GENERAL, ReadingType.UPRIGHT);
+    createReading(card, 20L, "건강 관련 조언입니다.UP", ReadingCategory.HEALTH, ReadingType.UPRIGHT);
+    createReading(card, 20L, "직업 관련 조언입니다.UP", ReadingCategory.CAREER, ReadingType.UPRIGHT);
+    createReading(card, 20L, "재물 관련 조언입니다.UP", ReadingCategory.WEALTH, ReadingType.UPRIGHT);
+    createReading(card, 20L, "사랑 관련 조언입니다.UP", ReadingCategory.LOVE, ReadingType.UPRIGHT);
+    createReading(card, 20L, "일반 관련 조언입니다.UP2", ReadingCategory.GENERAL, ReadingType.UPRIGHT);
+    createReading(card, 20L, "건강 관련 조언입니다.UP2", ReadingCategory.HEALTH, ReadingType.UPRIGHT);
+    createReading(card, 20L, "직업 관련 조언입니다.UP2", ReadingCategory.CAREER, ReadingType.UPRIGHT);
+    createReading(card, 20L, "재물 관련 조언입니다.UP2", ReadingCategory.WEALTH, ReadingType.UPRIGHT);
+    createReading(card, 20L, "사랑 관련 조언입니다.UP2", ReadingCategory.LOVE, ReadingType.UPRIGHT);
+
+    createReading(card, 20L, "일반 관련 조언입니다.RE", ReadingCategory.GENERAL, ReadingType.REVERSED);
+    createReading(card, 20L, "건강 관련 조언입니다.RE", ReadingCategory.HEALTH, ReadingType.REVERSED);
+    createReading(card, 20L, "직업 관련 조언입니다.RE", ReadingCategory.CAREER, ReadingType.REVERSED);
+    createReading(card, 20L, "재물 관련 조언입니다.RE", ReadingCategory.WEALTH, ReadingType.REVERSED);
+    createReading(card, 20L, "사랑 관련 조언입니다.RE", ReadingCategory.LOVE, ReadingType.REVERSED);
+    createReading(card, 20L, "일반 관련 조언입니다.RE2", ReadingCategory.GENERAL, ReadingType.REVERSED);
+    createReading(card, 20L, "건강 관련 조언입니다.RE2", ReadingCategory.HEALTH, ReadingType.REVERSED);
+    createReading(card, 20L, "직업 관련 조언입니다.RE2", ReadingCategory.CAREER, ReadingType.REVERSED);
+    createReading(card, 20L, "재물 관련 조언입니다.RE2", ReadingCategory.WEALTH, ReadingType.REVERSED);
+    createReading(card, 20L, "사랑 관련 조언입니다.RE2", ReadingCategory.LOVE, ReadingType.REVERSED);
+
+    createReading(card, 20L, "YES 관련 조언입니다.UP", ReadingCategory.YESNO, ReadingType.UPRIGHT);
+    createReading(card, 20L, "NO 관련 조언입니다.RE", ReadingCategory.YESNO, ReadingType.REVERSED);
+  }
+
+  private void createReading(TarotCard card, Long cardNumber, String description, ReadingCategory category, ReadingType type) {
+    CardReading reading = CardReading.createCardReading(new CardReadingRequestDto(
+        cardNumber, description, category, type
+    ));
+    reading.setTarotCard(card);
+    cardReadingService.save(reading);
+  }
 }
