@@ -1,23 +1,65 @@
 // app/page.tsx
 export default function HomePage() {
+  const sections = [
+    {
+      title: "타로 리딩",
+      description: "당신의 운명을 타로 카드에 담아보세요.",
+      href: "/tarot",
+    },
+    // 향후 추가될 다른 섹션들을 위한 공간
+    {
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },
+    {
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },
+    {
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },
+    {
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },{
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },{
+      title: "테스트",
+      description: "테스트용 설명",
+      href: "/",
+    },
+  ];
+
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center py-12 bg-gray-800">
-      <div className="text-center max-w-2xl mx-auto px-4">
-        <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text">
-          타로 리딩
-        </h1>
-        <p className="text-xl text-purple-200 mb-8 leading-relaxed">
-          당신의 운명을 타로 카드에 담아보세요. <br/>
-          오늘의 운세와 인사이트를 발견하실 수 있습니다.
-        </p>
-        <a 
-          href="/tarot" 
-          className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold 
-          hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg"
-        >
-          타로 카드 선택하기
-        </a>
-      </div>
+    <div>
+    <h1 className="text-6xl font-bold mb-16 bg-gradient-to-r from-purple-300 to-yellow-500 text-transparent bg-clip-text text-center">
+          Entertainment Hub
+    </h1>
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          {sections.map((section, index) => (
+            <a
+              key={index}
+              href={section.href}
+              className={`bg-gray-800  
+                         p-12 rounded-xl shadow-xl hover:scale-105 
+                         transition-transform duration-300`}
+            >
+              <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text">
+                {section.title}
+              </h2>
+              <p className="text-xl text-purple-200  leading-relaxed">
+                {section.description}
+              </p>
+            </a>
+          ))}
+        </div>
     </div>
-  )
+  );
 }
