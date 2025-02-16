@@ -8,26 +8,23 @@ import com.cafe24.entertainment.Entity.dto.CardReadingRequestDto;
 import com.cafe24.entertainment.Entity.dto.TarotCardRequestDto;
 import com.cafe24.entertainment.Repository.CardReadingRepository;
 import com.cafe24.entertainment.Repository.TarotCardRepository;
-import com.cafe24.entertainment.Service.TarotCardService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import java.io.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 안 사용할 거면 스프링 빈 등록 안되게끔(스캔X) @Component 주석 ㄱㄱ + @PostConstruct 주석도 마찬가지
+ * 이건 로컬에서 개발 테스트용임. 필요한 db데이터는 backup.sql 로 넣어랏.
  * */
 
 @Slf4j
 //@Component //빈 등록
 @RequiredArgsConstructor //생성자 주입
-public class TarotDataInit {
+public class TestTarotDataInit {
   private final InitService initService;
 
   // 해당 클래스 인스턴스 생성(construct)된 후 자동 실행

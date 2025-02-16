@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
+	// https://docs.spring.io/spring-boot/docs/current/reference/html/dependency-versions.html#appendix.dependency-versions.coordinates
+	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.1.0' // MYSQL
+//	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33' // MYSQL
 	annotationProcessor 'org.projectlombok:lombok'
 	// test(JUnit, AsserJ 등), lombok 을 test 에서 사용
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
